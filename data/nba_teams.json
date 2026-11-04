@@ -1,9 +1,9 @@
 {
- "fetched": "2026-10-22T18:38:02.856Z",
+ "fetched": "2026-11-04T15:29:16.102Z",
  "teams": {
   "atl": "Hawks",
-  "bos": "Celtics",
   "bkn": "Nets",
+  "bos": "Celtics",
   "cha": "Hornets",
   "chi": "Bulls",
   "cle": "Cavaliers",
@@ -26,8 +26,8 @@
   "phi": "76ers",
   "phx": "Suns",
   "por": "Trail Blazers",
-  "sac": "Kings",
   "sa": "Spurs",
+  "sac": "Kings",
   "tor": "Raptors",
   "utah": "Jazz",
   "wsh": "Wizards"
@@ -69,7 +69,6 @@
   "37": "mia",
   "38": "ind",
   "40": "bos",
-  "41": "okc",
   "42": "sa",
   "43": "bkn",
   "44": "sa",
@@ -87,6 +86,7 @@
  },
  "unsigned": [
   "32 Richie Saunders",
+  "41 Otega Oweh",
   "54 Lajae Jones",
   "59 Trey Kaufman-Renn"
  ]

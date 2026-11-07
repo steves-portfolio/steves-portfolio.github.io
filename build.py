@@ -33,7 +33,7 @@ html = f"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Steve Trombetta · Sports Analytics Notebook</title>
+<title>Steve's Portfolio · Steve Trombetta</title>
 <meta name="description" content="Sports analytics portfolio of Steve Trombetta: college basketball efficiency ratings, a 2026 NBA draft board, and more.">
 <meta name="theme-color" content="#f6f3ec">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f4e8c'/%3E%3Ctext x='32' y='44' font-family='Impact,sans-serif' font-size='34' fill='white' text-anchor='middle'%3EST%3C/text%3E%3C/svg%3E">

@@ -308,7 +308,6 @@ td .pl small{display:block;color:var(--ink3);font-weight:400;font-size:12px}
       <a href="#nba">NBA</a>
       <a href="#nfl">NFL</a>
       <a href="#nhl">NHL</a>
-      <a href="#epl">Premier League</a>
       <a href="#fav">Favorites</a>
       <a href="#about">About</a>
     </nav>
@@ -536,16 +535,6 @@ td .pl small{display:block;color:var(--ink3);font-weight:400;font-size:12px}
     </div>
   </article>
 
-  <!-- ===================== PREMIER LEAGUE ===================== -->
-  <article class="entry soon" id="epl">
-    <div class="wrap">
-      <header class="e-head narrow">
-        <p class="e-kick"><span class="sport">Premier League</span> · Next entry</p>
-        <h2>Coming this season.</h2>
-        <p class="dek">The next entry in the notebook. Same idea: one question fans argue about, answered with data, and the players who don't get the credit.</p>
-      </header>
-    </div>
-  </article>
 
   <!-- ===================== FAVORITE PLAYERS ===================== -->
   <section class="fav-sec" id="fav">
@@ -1435,8 +1424,7 @@ makeQuad({
                ["vCBB", "cbb", "College Basketball", "Is this team actually good, or just hyped?"]];
   const fmtD = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-US", {month: "short", day: "numeric"}) : "";
   list.innerHTML = ent.map(([v, id, sport, q]) => { const b = document.getElementById(v) || {dataset: {}}; const d = b.dataset.date;
-    return `<li><a href="#${id}"><span class="en-meta">${d ? fmtD(d) + " · " : ""}${sport}</span><span class="en-q">${q}</span><span class="en-a">${esc(b.dataset.summary || "")}</span></a></li>`; }).join("")
-    + `<li class="soon"><span class="en-meta">Premier League</span><span class="en-q">Next entry, coming this season</span></li>`;
+    return `<li><a href="#${id}"><span class="en-meta">${d ? fmtD(d) + " · " : ""}${sport}</span><span class="en-q">${q}</span><span class="en-a">${esc(b.dataset.summary || "")}</span></a></li>`; }).join("");
 })();
 })();
 

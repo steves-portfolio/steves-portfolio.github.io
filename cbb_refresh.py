@@ -24,6 +24,12 @@ g = g[g["poss"] > 40]
 counts = g["team_id"].value_counts()
 med = float(counts.median()) if len(counts) else 0
 if med < MIN_SWITCH:
+    # Not enough games for ratings yet: record how much of the new season is tracked so the page can show progress.
+    cj = R / "data/cbb.json"; meta = json.loads(cj.read_text())
+    if meta.get("season") != a.season:
+        meta["tracking"] = {"season": a.season, "label": a.season.replace("-", "\u2013"), "games": int(g["game_id"].nunique()), "teams": int(len(counts)),
+                            "median": int(med), "need": MIN_SWITCH, "updated": datetime.date.today().isoformat()}
+        cj.write_text(json.dumps(meta))
     print(f"Median team has {med:.0f} games (< {MIN_SWITCH}); keeping last season's final ratings."); raise SystemExit(0)
 min_games = max(3, int(med * 0.6))
 d1 = set(counts[counts >= min_games].index)

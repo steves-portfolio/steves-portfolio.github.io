@@ -87,3 +87,15 @@ The "answer" text and Unsung Hero cards are computed on the page from the data, 
 - New site: https://steves-portfolio.github.io/  (the old steves-sports-analytics.github.io link no longer works; GitHub doesn't redirect Pages sites)
 - Page title is now "Steve's Portfolio · Steve Trombetta"; header still shows Steve Trombetta. Data and layout unchanged.
 - Files before the rename: data/history/before_rename_2026-11-07/.
+
+## Nov 10, 2026: take headlines, Called It, college deep-dive lists
+- Removed: every "coming next" placeholder (Premier League) and the college Matchup projector.
+- Headlines are takes, auto-written from the data each build (question stays as the small line underneath):
+  NBA: "The scouts are cooking my model." / "My model is cooking the scouts." / coin flip if the two rank correlations are within 0.03.
+  College: "<top fraud> is a fraud. <top sleeper> is better than you think." ONLY on current-season ratings. While data/cbb.json has final=true (last season), the plain question stays and the lists use neutral labels. Steve's rule: no takes until the median team has 5 games.
+- College card lists (3 each): Frauds, Sleepers (well-known programs), Mid-majors that can hang (best-rated teams outside that list), Paper tigers (mid-majors with a top-50 record, bottom-half schedule, rated 25+ spots below their record).
+- cbb_refresh.py now writes "tracking" (games, median games, need) into data/cbb.json while it waits for 5 games; the page shows it as progress. Upload data/cbb.json each week.
+- NBA "Called it: struggling" (v1), in src/app.js draftVerdict. Sample = college draftees with 3+ NBA games, full college seasons only. Ranks inside that sample:
+  modelGap = model rank - draft rank (need >= 4), miss = Game Score rank - draft rank (need >= 3). Sort by min(modelGap, miss), ties to the higher pick, top 3.
+  The names are in #vDraft data-called. Only tune the thresholds with Steve's OK, and note any change here.
+- Files before this change: data/history/before_takes_2026-11-10/ and data/history/before_remove_coming_2026-11-10/. Preview copy: ../preview work 2026-11-10 (safe to ignore).

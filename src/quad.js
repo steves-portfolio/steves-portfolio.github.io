@@ -216,7 +216,6 @@ makeQuad({
                ["vCBB", "cbb", "College Basketball", "Is this team actually good, or just hyped?"]];
   const fmtD = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-US", {month: "short", day: "numeric"}) : "";
   list.innerHTML = ent.map(([v, id, sport, q]) => { const b = document.getElementById(v) || {dataset: {}}; const d = b.dataset.date;
-    return `<li><a href="#${id}"><span class="en-meta">${d ? fmtD(d) + " · " : ""}${sport}</span><span class="en-q">${q}</span><span class="en-a">${esc(b.dataset.summary || "")}</span></a></li>`; }).join("")
-    + `<li class="soon"><span class="en-meta">Premier League</span><span class="en-q">Next entry, coming this season</span></li>`;
+    return `<li><a href="#${id}"><span class="en-meta">${d ? fmtD(d) + " · " : ""}${sport}</span><span class="en-q">${q}</span><span class="en-a">${esc(b.dataset.summary || "")}</span></a></li>`; }).join("");
 })();
 })();

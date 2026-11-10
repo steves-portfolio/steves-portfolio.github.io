@@ -36,8 +36,9 @@
     <div class="wrap">
       <header class="e-head narrow">
         <p class="e-kick"><span class="sport">College Basketball</span> · <span class="cbb-season">2025–26</span> · <span class="cbb-updated"></span></p>
-        <h2>Is this team actually good, or just hyped?</h2>
-        <p class="dek">Win-loss records hide how good a team really is. Fast teams score more, and soft schedules pad records. I rate every Division I team on points per 100 possessions, then adjust for who they played and where, in the style of KenPom.</p>
+        <h2 id="cbbTake">Is this team actually good, or just hyped?</h2>
+        <p class="e-q" hidden>Is this team actually good, or just hyped?</p>
+        <p class="dek">Records lie. I rate every Division I team on points per 100 possessions, adjusted for who they played and where, KenPom-style.</p>
       </header>
 
       <div class="verdict" id="vCBB">
@@ -69,23 +70,6 @@
         </div>
       </div>
 
-      <details class="more">
-        <summary>Matchup projector: pick any two teams</summary>
-        <div class="panel mm">
-          <div class="mm-pick">
-            <div class="field"><label for="mmA">Team A</label><select id="mmA"></select></div>
-            <div class="vs">vs</div>
-            <div class="field"><label for="mmB">Team B</label><select id="mmB"></select></div>
-          </div>
-          <div class="seg-ctl" role="group" aria-label="Venue" id="venue">
-            <button data-v="1">A at home</button><button data-v="0" aria-pressed="true">Neutral</button><button data-v="-1">B at home</button>
-          </div>
-          <div class="sb" id="sb"></div>
-          <div class="wp" id="wp"></div>
-          <div class="wp-l" id="wpl"></div>
-          <p class="cap">Each offense's adjusted rating against the other's defense, at a combined tempo, with a 1.4% home-court edge. Win chance assumes an 11-point standard deviation.</p>
-        </div>
-      </details>
 
       <details class="more">
         <summary>Full ratings table</summary>
@@ -119,8 +103,9 @@
     <div class="wrap">
       <header class="e-head narrow">
         <p class="e-kick"><span class="sport">NBA</span> · 2026 Draft &amp; Rookie Report · <span class="rk-updated"></span></p>
-        <h2>Did NBA teams get it right?</h2>
-        <p class="dek">I scored every college player taken in the 2026 draft from 0 to 100, comparing him to other players at his position and factoring in his age, then compared it with where he actually went. Once the season starts, a weekly Rookie Report checks who was right: the model or the scouts.</p>
+        <h2 id="nbaTake">Did NBA teams get it right?</h2>
+        <p class="e-q" hidden>Did NBA teams get it right?</p>
+        <p class="dek">Before the draft, my model graded all 54 college players taken. Every week, the Rookie Report checks who was right: the model or the scouts.</p>
       </header>
 
       <div class="verdict" id="vDraft">

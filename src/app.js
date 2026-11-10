@@ -30,7 +30,7 @@ const fmtDate = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-US", {
   if (bt.post_games) set("#pPost", ((bt.post_acc || 0) * 100).toFixed(1) + "%"); else { set("#pPost", NT); set("#pPostT", "teams rated so far"); }
   set("#cGames", (bt.games || 0).toLocaleString()); set("#cAcc", ((bt.acc || 0) * 100).toFixed(1) + "%");
   set("#sTeams", NT); set("#sGames", (bt.games || 0).toLocaleString()); set("#sAcc", ((bt.acc || 0) * 100).toFixed(1) + "%");
-  set(".cbb-season", CB.label || "2025–26"); set(".cbb-updated", CB.final ? "Final ratings · new season starts Nov 2" : "Updated " + fmtDate(CB.updated));
+  set(".cbb-season", CB.label || "2025–26"); set(".cbb-updated", CB.final ? "Final ratings" : "Updated " + fmtDate(CB.updated));
 })();
 const byRank = new Map(TEAMS.map(t => [t.rank, t]));
 const P = DRAFT_ROWS.trim().split("\n").map(r => {
@@ -180,33 +180,6 @@ function renderCBB(){
 $("#cbbQ").addEventListener("input", renderCBB);
 $("#cbbAll").onclick = () => { cbbAll = !cbbAll; $("#cbbAll").textContent = cbbAll ? "Top 25 only" : `Show all ${NT}`; renderCBB(); };
 
-/* ================= MATCHUP MACHINE ================= */
-const alpha = [...TEAMS].sort((a,b) => a.team.localeCompare(b.team));
-const opts = alpha.map(t => `<option value="${t.id}">${esc(t.team)} (No. ${t.rank})</option>`).join("");
-$("#mmA").innerHTML = opts; $("#mmB").innerHTML = opts;
-$("#mmA").value = 130; $("#mmB").value = 41;
-let venue = 0;
-$$("#venue button").forEach(b => b.onclick = () => { venue = +b.dataset.v; $$("#venue button").forEach(x => x.setAttribute("aria-pressed", x === b)); matchup(); });
-$("#mmA").onchange = matchup; $("#mmB").onchange = matchup;
-function phi(z){ // normal CDF
-  const t = 1/(1+0.2316419*Math.abs(z)), d = 0.3989423*Math.exp(-z*z/2);
-  const p = d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
-  return z > 0 ? 1-p : p;
-}
-function readable(hex){ const n = parseInt(hex.slice(1),16), r=n>>16, g=n>>8&255, b=n&255; return (0.299*r+0.587*g+0.114*b) > 170 ? "#000" : "#fff"; }
-function matchup(){
-  const A = TEAMS.find(t => t.id === +$("#mmA").value), B = TEAMS.find(t => t.id === +$("#mmB").value);
-  const poss = A.adjT * B.adjT / AVGT;
-  let oa = A.adjO * B.adjD / AVG, ob = B.adjO * A.adjD / AVG;
-  if (venue === 1){ oa *= 1.014; ob *= 0.986; } else if (venue === -1){ oa *= 0.986; ob *= 1.014; }
-  const pa = oa*poss/100, pb = ob*poss/100, margin = pa - pb, wa = A.id === B.id ? .5 : phi(margin/11);
-  const side = (t, s, r) => `<div class="tm ${r?"r":""}" style="background:${t.color};color:${readable(t.color)}">${ncaaLogo(t.id,"lg lg-sb")}<span class="ab">${esc(t.abbr)}</span><span class="nm">${esc(t.team)} · ${t.w}-${t.l}</span><span class="sc">${Math.round(s)}</span></div>`;
-  $("#sb").innerHTML = side(A, pa) + `<div class="mid"><b>Proj.</b>${venue===0?"Neutral":venue===1?"@ "+esc(A.abbr):"@ "+esc(B.abbr)}<span>${Math.round(poss)} poss</span></div>` + side(B, pb, true);
-  $("#wp").innerHTML = `<div style="width:${wa*100}%;background:${A.color}"></div><div style="width:${(1-wa)*100}%;background:${B.color}"></div>`;
-  const fav = margin >= 0 ? A : B;
-  $("#wpl").innerHTML = `<span>${esc(A.abbr)} ${Math.round(wa*100)}%</span><span>${A.id===B.id?"Mirror match":esc(fav.team)+" by "+fmt(Math.abs(margin))}</span><span>${esc(B.abbr)} ${Math.round((1-wa)*100)}%</span>`;
-}
-
 /* ================= DRAFT ================= */
 /* Model v2 is computed offline (draft_model/draft_model.py): position groups, prior-season blend, age. No sliders. */
 let draftSort = {k:"mrank", dir:1};
@@ -337,11 +310,21 @@ function cbbVerdict(){
   const under = known.filter(t => t.rank <= 75).sort((a, b) => a.luck - b.luck).slice(0, 3);
   const h = hyped[0], u = under[0];
   const rec = t => `${t.w}-${t.l}`, xtra = t => Math.abs(t.luck * (t.w + t.l)).toFixed(1);
-  const li = t => `<div class="cp">${ncaaLogo(t.id, "lg lg-md")}<span>${esc(t.team)}<small>${rec(t)} record · No.&nbsp;${t.rank} by efficiency<br>${ordn(t.sosRank)}-toughest schedule</small></span></div>`;
-  $(".v-body", box).innerHTML = `<p>Records lie, a little. Soft schedules and close wins can make a team look better than it plays. Among the big-name programs, <b>${esc(h.team)}</b> went ${rec(h)} (No. ${h.recRank} by record) but played like the No. ${h.rank} team in the country. That's the team to be careful with when everyone's hyping them.</p>
-    <p>The flip side: <b>${esc(u.team)}</b> (${rec(u)}) rates No. ${u.rank}. Close losses and a tough schedule made them look worse than they are.</p>
-    <div class="v-list"><div><small style="color:var(--bad)">Record flatters them</small>${hyped.map(li).join("")}</div><div><small style="color:var(--good)">Better than their record</small>${under.map(li).join("")}</div></div>`;
-  $(".v-upd", box).textContent = CB.final ? `${CB.label} final · new season starts Nov 2` : `Updated ${fmtDate(CB.updated)}`;
+  // Mid-majors (everyone outside the well-known list): the best-rated ones can hang with anybody;
+  // paper tigers have a top-50 record built on a bottom-half schedule, and rate far below it.
+  const mids = T.filter(t => !BIG.has(+t.id));
+  const hang = [...mids].sort((a, b) => a.rank - b.rank).slice(0, 3);
+  const tigers = mids.filter(t => t.recRank <= 50 && t.sosRank > NT / 2 && t.rank - t.recRank >= 25).sort((a, b) => (b.rank - b.recRank) - (a.rank - a.recRank)).slice(0, 3);
+  const li = t => `<div class="cp">${ncaaLogo(t.id, "lg lg-md")}<span>${esc(t.team)}<small>${rec(t)} · plays like No.&nbsp;${t.rank} · schedule No.&nbsp;${t.sosRank}</small></span></div>`;
+  const none = `<div class="cp"><span><small>Nobody fits right now</small></span></div>`;
+  const col = (color, label, list) => `<div><small style="color:var(--${color})">${label}</small>${list.map(li).join("") || none}</div>`;
+  const was = CB.final;
+  // Takes only run on current-season ratings (median team has 5+ games); last season's finals keep the plain question.
+  const take = $("#cbbTake"); if (take && h && u && !was) { take.textContent = `${h.team} is a fraud. ${u.team} is better than you think.`; const q = take.parentNode.querySelector(".e-q"); if (q) q.hidden = false; }
+  const TK = CB.tracking, trk = was ? (TK && TK.games ? `<p class="cap"><b>${esc(TK.label || "This season")} so far:</b> ${TK.games.toLocaleString()} games tracked, and the median team has played ${TK.median}. New ratings and takes start once that hits ${TK.need || 5}, so one hot week can't fake a ranking.</p>` : `<p class="cap">This season's ratings and takes start once the median team has played 5 games.</p>`) : "";
+  $(".v-body", box).innerHTML = `<p>${was ? "Last season: " : ""}<b>${esc(h.team)}</b> went ${rec(h)}, the No. ${h.recRank} record in the country, and played like the No. ${h.rank} team. <b>${esc(u.team)}</b> (${rec(u)}) is the opposite: No. ${u.rank} by efficiency, with close losses and a brutal schedule hiding it.</p>
+    <div class="v-list">${col("bad", was ? "Record flattered them" : "Frauds", hyped)}${col("good", was ? "Better than their record" : "Sleepers", under)}${col("good", was ? "Mid-majors that could hang" : "Mid-majors that can hang", hang)}${col("bad", was ? "Soft-schedule records" : "Paper tigers", tigers)}</div>${trk}`;
+  $(".v-upd", box).textContent = CB.final ? `${CB.label} final ratings` : `Updated ${fmtDate(CB.updated)}`;
   const cand = known.filter(t => t.recRank - t.rank >= 25).sort((a, b) => a.rank - b.rank);
   const hero = holdHero("cbb", cand[0] || u, t => t.team, n => cand.find(t => t.team === n), CB.updated);
   box.dataset.candidate = (cand[0] || u).team; box.dataset.hero = hero.team;
@@ -386,7 +369,18 @@ function draftVerdict(){
     const top = [...q].sort((a, b) => b.gmsc - a.gmsc).slice(0, 3);
     const li = r => `<div class="cp">${nbaFace(r.pick, logo("nba", r.team.toLowerCase(), "lg lg-md"))}<span>${esc(r.name)}<small>pick ${r.pick} · ${fmt(r.ppg)} ppg · ${fmt(r.gmsc)} GmSc</small></span></div>`;
     const winner = isNaN(rM) ? "" : rM > rD ? `<b>So far, the model is beating the scouts.</b> Its ranking lines up with rookie production better than draft order does (rank correlation ${rM.toFixed(2)} vs. ${rD.toFixed(2)}).` : `<b>So far, the scouts are winning.</b> Draft order lines up with rookie production better than the model does (rank correlation ${rD.toFixed(2)} vs. ${rM.toFixed(2)}).`;
-    $(".v-body", box).innerHTML = `<p>${winner} It's early, and rookies' minutes swing a lot, so this will move week to week.</p><p>Production is measured with Game Score, a one-number box score summary, among rookies with 3+ games.</p><div class="v-list"><div><small style="color:var(--good)">Top rookie producers</small>${top.map(li).join("")}</div><div><small style="color:var(--ink3)">Sample</small><div class="cp"><span>${q.length} of 54 college draftees have played 3+ games</span></div></div></div>`;
+    // Called It (v1, Nov 2026): rookies my model graded clearly lower than where they were drafted who are now producing
+    // below their draft slot. Everything is ranked inside the same 3+ games sample: draft order, model rank, and production
+    // (Game Score per game, which counts scoring, efficiency, rebounds, assists, steals, blocks, turnovers and fouls).
+    //   modelGap = model rank - draft rank (>= 4: the model was clearly lower than the scouts)
+    //   miss     = production rank - draft rank (>= 3: he is producing below his slot)
+    // Sorted by the smaller of the two, so both the call and the struggle have to be big; ties go to the higher pick.
+    const called = q.map((r, i) => ({r, prod: prod[i], gap: modelR[i] - draftR[i], miss: prod[i] - draftR[i]}))
+      .filter(x => FULL(x.r.p) && x.gap >= 4 && x.miss >= 3).sort((a, b) => Math.min(b.gap, b.miss) - Math.min(a.gap, a.miss) || a.r.pick - b.r.pick).slice(0, 3);
+    const cli = x => `<div class="cp">${nbaFace(x.r.pick, logo("nba", x.r.team.toLowerCase(), "lg lg-md"))}<span>${esc(x.r.name)}<small>pick ${x.r.pick} · model had him No. ${x.r.p.mrankDefault} · producing ${ordn(x.prod)} of ${q.length}</small></span></div>`;
+    box.dataset.called = called.map(x => x.r.name).join("|");
+    const take = $("#nbaTake"); if (take && !isNaN(rM)) { take.textContent = Math.abs(rM - rD) < 0.03 ? "Model vs. scouts is a coin flip right now." : rM > rD ? "My model is cooking the scouts." : "The scouts are cooking my model."; const qq = take.parentNode.querySelector(".e-q"); if (qq) qq.hidden = false; }
+    $(".v-body", box).innerHTML = `<p>${winner} It's early, and rookies' minutes swing a lot, so this will move week to week.</p><p>Production is Game Score per game among the ${q.length} of 54 college draftees with 3+ games.</p><div class="v-list"><div><small style="color:var(--good)">Top rookie producers</small>${top.map(li).join("")}</div><div><small style="color:var(--bad)">Called it: struggling</small>${called.map(cli).join("") || `<div class="cp"><span><small>No calls landing yet. The model's reaches are holding up so far.</small></span></div>`}</div></div>`;
   }
 
   // ---- unsung hero: a late pick out-producing his slot once the scoreboard is on; otherwise the model's biggest late-round bet ----
@@ -431,7 +425,7 @@ function draftVerdict(){
   const c = B.classes || {}, a = B.all || {};
   el.innerHTML = `<b>Does it work? I tested it on the last two drafts.</b> Ranking ${a.n} drafted college players from 2024 and 2025 against how they've actually played in the NBA (total Game Score), the new model's rank correlation is <b>${a.model_v2}</b>, up from <b>${a.model_v1}</b> for the first version (basically no signal). NBA draft order still does better at <b>${a.draft_order}</b>, since scouts see things box scores can't: workouts, medicals, fit. By class: 2024 ${c["2024"]?.model_v2} vs. draft ${c["2024"]?.draft_order}; 2025 ${c["2025"]?.model_v2} vs. draft ${c["2025"]?.draft_order}. So treat the model as a second opinion, not a replacement for scouting.`; })();
 /* ================= INIT ================= */
-renderCBB(); drawScatter(); matchup();
+renderCBB(); drawScatter();
 compute();
 refreshDraft();
 try { cbbVerdict(); } catch(e) { console.error(e); }

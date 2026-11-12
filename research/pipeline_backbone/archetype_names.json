@@ -1,0 +1,3 @@
+{"named_by": "Steve, Nov 11 2026",
+ "clusters": {"2": "Movement Shooter", "3": "Connector", "4": "Volume Shooter", "0": "Paint Anchor", "1": "Swiss Army Forward"},
+ "note": "Cluster numbers are from analyze.py (KMeans k=5, random_state=7) on the 2015-2026 drafted college players. Keep the saved centroids when re-running so names stay attached."}

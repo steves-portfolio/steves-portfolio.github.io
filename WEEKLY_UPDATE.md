@@ -99,3 +99,40 @@ The "answer" text and Unsung Hero cards are computed on the page from the data, 
   modelGap = model rank - draft rank (need >= 4), miss = Game Score rank - draft rank (need >= 3). Sort by min(modelGap, miss), ties to the higher pick, top 3.
   The names are in #vDraft data-called. Only tune the thresholds with Steve's OK, and note any change here.
 - Files before this change: data/history/before_takes_2026-11-10/ and data/history/before_remove_coming_2026-11-10/. Preview copy: ../preview work 2026-11-10 (safe to ignore).
+- College hoops END GOAL (Steve, Nov 10): help as much as possible for March Madness. Track every team through the whole regular season, plus the signals that say how a team will do down the stretch. Build new college features toward that.
+
+## Nov 11, 2026: The Pipeline (Steve's flagship project, planned, not built yet)
+- Pitch: "I follow every draft prospect from his first college game to his third NBA season, and grade my own model along the way."
+- Lenses: glue guy (skills that translate: rebounding, steals/blocks, assists, FT%, 3-pt rate) + market (rising / overhyped vs. consensus + Vegas). No Philly angle. No card content on the page.
+- One page: take headline, Board (top ~60 from Ultimate Big Board consensus, credited) with model rank, translation score, archetype badge, stock-ticker sparkline; sleeper receipts (dated calls, graded); award race (POY + Freshman, "impact on a winner"); Steve's Guys (from Steves Notes.xlsx); NBA chapter (Rookie Report + 2024-26 class tracker, roles by minutes AND starts).
+- Archetypes: data clusters, Steve names them and can override per player.
+- Backbone study: which college archetypes become NBA players, drafted college players since ~2015.
+- Steve's notes live in ../Steves Notes.xlsx (Prospects sheet). The refresh only reads it, never writes it.
+- June 2027 = success if sleepers were called before their breakout, and rookie data proves which college skills translate.
+- Odds key (odds_key.txt) still needed for the Vegas line.
+
+## Nov 12, 2026: SITE REWORK. The Pipeline is now the only project on the site
+- Steve is reworking the portfolio. The live site (docs/index.html) is now ONLY The Pipeline page. The old multi-sport site (college ratings, NBA draft board, NFL/NHL quadrants) is archived locally:
+  ../older site versions/2026-11-12 multi-sport site (before The Pipeline).html and "...multi-sport site src". Its scripts (build.py, refresh.py, cbb_refresh.py, rookie_refresh.py, check_build.py) are NOT part of the weekly run any more. NEVER run build.py: it would overwrite docs/index.html with the old site.
+- Page source: pipeline/render.py (HTML/CSS/JS template) + data/pipeline.json. Style: src/style.css.
+
+### Weekly Pipeline refresh (every Wednesday)
+1. Downloads (device_bash; a file under 1 KB is a 404, stop and report):
+   B=https://github.com/sportsdataverse/sportsdataverse-data/releases/download; mkdir -p $HOME/dm && cd $HOME/dm
+   for y in 2025 2026 2027; do curl -sSL -m 150 -o mbb_pb_$y.parquet $B/espn_mens_college_basketball_player_boxscores/player_box_$y.parquet; done
+   curl -sSL -m 150 -o nba_pb_2027.parquet $B/espn_nba_player_boxscores/player_box_2027.parquet
+2. Consensus board (Chrome): open https://ultimatebigboard.com/nba/2027/, collect the 60 player links (rank|slug|avg pick|row text) and save Downloads/ubb_nba_2027_<YYYY-MM-DD>.txt (see the Nov 11 session; header rank|slug|avg_pick|text). Copy it into pipeline/work/. If it fails, reuse the newest file in pipeline/work/ and say so.
+3. python3 pipeline/board_refresh.py pipeline/work/<newest ubb file>
+   - "NEED BIO" ids: in Chrome on https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball fetch /v2/sports/basketball/leagues/mens-college-basketball/athletes/<id> for each and append id:height:dob:class:position to pipeline/work/bio27.txt (comma separated), then rerun step 3.
+   - "CHECK same-name matches": confirm the school matches the board; fix in ID_FIX if not.
+4. python3 pipeline/pipeline_build.py   (writes data/pipeline.json, logs official calls in data/pipeline_calls.csv once a player has 8+ games, snapshots data/history/pipeline/board_<date>.csv)
+5. python3 pipeline/render.py data/pipeline.json src/style.css docs/index.html
+6. Check (cloud container, Playwright): stage docs/index.html + pipeline/check_pipeline.py; python3 check_pipeline.py <staged index.html>. If it fails: publish nothing, notify Steve.
+7. Publish (GitHub web upload, main branch): data (pipeline.json, pipeline_calls.csv), data/history/pipeline (new snapshot), pipeline/work (new ubb file, bio27.txt if changed), docs/index.html LAST. Confirm the live site shows the new "Updated" date.
+8. Notify Steve: board movers (biggest model/expert gaps, any archetype that changed), new official calls, rookie leaders/laggards vs. slot, award race top 3.
+
+### How the model evolves during the season (Steve's standing instruction: handle it as the data says)
+- Archetype reads: position rule (only archetypes his position has produced) + 120-minute position prior. Lean < 150 min, faded < 8 games. Revisit the prior size in mid-December once most players pass 8 games; document any change here with the date.
+- Official sleeper/caution calls lock at 8 games and are never edited afterwards; grade them at the draft and after the rookie year.
+- Once college team ratings are live (median team 5+ games), weight the award race by opponent quality.
+- Any model change = new version note here + the README in research/pipeline_backbone, and a short "what changed" line on the page.

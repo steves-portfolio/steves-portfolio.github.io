@@ -1,0 +1,61 @@
+rank|slug|avg_pick|text
+1|tyran-stokes|1.7|1 Tyran Stokes Kansas · Sacramento Kings 1.7
+2|jordan-smith|3.1|2 Jordan Smith Arkansas · New Orleans Pelicans (via Bucks) 3.1
+3|kanon-catchings|4.0|3 Kanon Catchings Georgia · Utah 4.0
+4|caleb-holt|4.4|4 Caleb Holt Arizona · Houston Rockets (via Brooklyn Nets) 4.4
+5|stefan-joksimovic|4.6|5 Stefan Joksimovic Baskonia · New Orleans Pelicans (via Milwaukee) 4.6
+6|bruce-branch|5.0|6 BB BRUCE BRANCH F · BYU Chicago Bulls MOST COMMON 5.0 weighted 4.0 pick 2–11 M
+7|pat-ngongba|8.0|7 PN PAT NGONGBA C · Duke — NO TEAM SUPPLIED 8.0 weighted 8.0 pick 8–8 Tight ran
+8|quentin-coleman|11.6|8 QC QUENTIN COLEMAN G · Illinois Brooklyn Nets (via Houston) MOST COMMON 11.6 w
+9|anthony-thompson|11.7|9 AT ANTHONY THOMPSON F · Ohio State Chicago Bulls MOST COMMON 11.7 weighted 12.
+10|motiejus-krivas|12.1|10 MK MOTIEJUS KRIVAS C · Arizona Orlando Magic MOST COMMON 12.1 weighted 10.0 p
+11|hugo-yigma-moukouri|13.0|11 HY HUGO YIGMA-MOUKOURI F · Nanterre 92 — NO TEAM SUPPLIED 13.0 weighted 13.0 
+12|colben-landrew|13.4|12 CL COLBEN LANDREW F · UConn OKC Thunder (via Nuggets) MOST COMMON 13.4 weight
+13|braylon-mullins|13.7|13 BM BRAYLON MULLINS G · UConn Orlando Magic MOST COMMON 13.7 weighted 11.0 pic
+14|ivan-kharchenkov|14.1|14 IK IVAN KHARCHENKOV SF · Arizona Golden State Warriors MOST COMMON 14.1 weigh
+15|amari-allen|14.4|15 AA AMARI ALLEN F · Alabama Washington Wizards MOST COMMON 14.4 weighted 12.0 
+16|patrick-ngongba|14.4|16 PN PATRICK NGONGBA C · Duke Portland Trail Blazers MOST COMMON 14.4 weighted 
+17|brandon-mccoy|15.4|17 BM BRANDON MCCOY G · Michigan Atlanta Hawks (via New Orleans) MOST COMMON 15.
+18|abdou-toure|15.4|18 AT ABDOU TOURE F · Arkansas Houston Rockets (via Suns) MOST COMMON 15.4 weigh
+19|obinna-ekezie|16.3|19 OE OBINNA EKEZIE C · Louisville Charlotte Hornets (via Mavs) MOST COMMON 16.3
+20|thomas-haugh|17.1|20 TH THOMAS HAUGH F · Florida Portland Trail Blazers MOST COMMON 17.1 weighted 
+21|hugo-yimga-moukouri|17.9|21 HY HUGO YIMGA-MOUKOURI F · Nanterre 92 Boston Celtics MOST COMMON 17.9 weight
+22|christian-collins|18.0|22 CC CHRISTIAN COLLINS SF · USC LA Clippers MOST COMMON 18.0 weighted 18.5 pick
+23|alijah-arenas|18.3|23 AA ALIJAH ARENAS G · USC Golden State Warriors MOST COMMON 18.3 weighted 14.0
+24|caleb-gaskins|18.7|24 CG CALEB GASKINS F · Miami Portland Trail Blazers MOST COMMON 18.7 weighted 1
+25|klark-reithauser|19.0|25 KR KLARK REITHAUSER SF · Switzerland Atlanta MOST COMMON 19.0 weighted 19.0 p
+26|luigi-suigo|19.1|26 LS LUIGI SUIGO C · Villanova Utah Jazz (via Cleveland Cavaliers) MOST COMMON 
+27|maximo-adams|19.4|27 MA MAXIMO ADAMS F · North Carolina Phoenix Suns (via MIN) MOST COMMON 19.4 we
+28|baba-oladotun|19.7|28 BO BABA OLADOTUN F · Maryland Charlotte Hornets MOST COMMON 19.7 weighted 17.
+29|davis-fogle|20.0|29 DF DAVIS FOGLE SG · Gonzaga Phoenix Suns (via Minnesota Timberwolves) MOST CO
+30|jason-crowe|20.9|30 JC JASON CROWE G · Missouri Golden State Warriors MOST COMMON 20.9 weighted 1
+31|cameron-williams|21.0|31 CW CAMERON WILLIAMS F · Duke Memphis Grizzlies (via Utah Jazz) MOST COMMON 21
+32|sayon-keita|21.2|32 SK SAYON KEITA C · North Carolina Detroit Pistons MOST COMMON 21.2 weighted 2
+33|bryson-tiller|22.0|33 BT BRYSON TILLER PF · Missouri Cleveland MOST COMMON 22.0 weighted 22.0 pick 
+34|dylan-mingo|22.8|34 DM DYLAN MINGO G · Baylor Charlotte Hornets (via Miami Heat) MOST COMMON 22.8
+35|jj-andrews|23.0|35 JA JJ ANDREWS F · Arkansas Boston Celtics MOST COMMON 23.0 weighted 23.0 pick
+36|miikka-muurinen|23.5|36 MM MIIKKA MUURINEN PF · Arkansas Philadelphia MOST COMMON 23.5 weighted 18.0 
+37|stefan-vaaks|24.0|37 SV STEFAN VAAKS — · Illinois Brooklyn Nets (via Rockets) MOST COMMON 24.0 wei
+38|billy-richmond|24.7|38 BR BILLY RICHMOND W · Arkansas Oklahoma City Thunder (via Denver Nuggets) MOS
+39|tyler-tanner|25.0|39 TT TYLER TANNER G · Vanderbilt Brooklyn Nets (via Knicks) MOST COMMON 25.0 we
+40|daniel-jacobsen|25.0|40 DJ DANIEL JACOBSEN C · Purdue Blazers MOST COMMON 25.0 weighted 25.0 pick 25–
+41|sammy-jackson|25.0|41 SJ SAMMY JACKSON G · VCU OKLAHOMA CITY THUNDER (via DEN) MOST COMMON 25.0 wei
+42|tounde-yessoufou|25.1|42 TY TOUNDE YESSOUFOU G · St. John’s Memphis Grizzlies (via Los Angeles Lakers)
+43|arafan-diane|25.1|43 AD ARAFAN DIANÉ C · Houston Phoenix Suns (via Timberwolves) MOST COMMON 25.1 
+44|trey-mckenney|25.4|44 TM TREY MCKENNEY G · Michigan Oklahoma City Thunder (via San Antonio Spurs) M
+45|dame-sarr|25.6|45 DS DAME SARR G · Duke Philadelphia 76ers MOST COMMON 25.6 weighted 25.5 pick 
+46|na-jai-hines|25.7|46 NH NA’JAI HINES C · UConn Utah Jazz (via Cavs) MOST COMMON 25.7 weighted 19.5
+47|cole-cloer|26.0|47 CC COLE CLOER — · Alabama Detroit Pistons MOST COMMON 26.0 weighted 26.0 pick
+48|austin-goosby|26.1|48 AG AUSTIN GOOSBY G · Texas OKC Thunder (via Spurs) MOST COMMON 26.1 weighted 
+49|malachi-moreno|26.4|49 MM MALACHI MORENO C · Kentucky Indiana Pacers MOST COMMON 26.4 weighted 21.0 
+50|matthew-able|26.9|50 MA MATT ABLE G · North Carolina Detroit Pistons MOST COMMON 26.9 weighted 24.
+51|david-mirkovic|27.6|51 DM DAVID MIRKOVIC F · Illinois Boston Celtics MOST COMMON 27.6 weighted 24.0 
+52|bryson-howard|27.6|52 BH BRYSON HOWARD G · Duke Brooklyn Nets (via HOU) MOST COMMON 27.6 weighted 2
+53|mouhamed-sylla|29.0|53 MS MOUHAMED SYLLA C · West Virginia San Antonio MOST COMMON 29.0 weighted 29.
+54|miles-sadler|29.8|54 MS MILES SADLER G · West Virginia PHOENIX SUNS (via MIN) MOST COMMON 29.8 wei
+55|amadou-seini|30.0|55 AS AMADOU SEINI C · West Virginia — NO TEAM SUPPLIED 30.0 weighted 30.0 pick 
+56|rueben-chinyelu|30.2|56 RC RUEBEN CHINYELU C · Florida Utah Jazz (via Cavaliers) MOST COMMON 30.2 wei
+57|cheickh-niang|31.0|57 CN CHEICKH NIANG SF · Trento Philadelphia 76ers (via Warriors) MOST COMMON 31
+58|matas-vokietaitis|31.3|58 MV MATAS VOKIETAITIS C · Texas Brooklyn Nets (From New York Knicks) MOST COMM
+59|dash-daniels|34.6|59 DD DASH DANIELS G · Australia Oklahoma City Thunder (From Denver Nuggets) MOS
+60|deron-rippey|34.9|60 DR DERON RIPPEY G · Duke Memphis Grizzlies (via Lakers) MOST COMMON 34.9 weig

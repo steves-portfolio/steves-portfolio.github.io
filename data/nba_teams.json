@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-04T15:29:16.102Z",
+ "fetched": "2026-11-12T00:17:09.865Z",
  "teams": {
   "atl": "Hawks",
   "bkn": "Nets",
@@ -62,7 +62,7 @@
   "29": "sac",
   "30": "phx",
   "31": "hou",
-  "33": "min",
+  "32": "mem",
   "34": "cle",
   "35": "den",
   "36": "lac",
@@ -85,7 +85,7 @@
   "58": "no"
  },
  "unsigned": [
-  "32 Richie Saunders",
+  "33 Isaiah Evans",
   "41 Otega Oweh",
   "54 Lajae Jones",
   "59 Trey Kaufman-Renn"

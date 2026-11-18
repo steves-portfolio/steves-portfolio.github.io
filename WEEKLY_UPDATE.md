@@ -136,3 +136,6 @@ The "answer" text and Unsung Hero cards are computed on the page from the data, 
 - Official sleeper/caution calls lock at 8 games and are never edited afterwards; grade them at the draft and after the rookie year.
 - Once college team ratings are live (median team 5+ games), weight the award race by opponent quality.
 - Any model change = new version note here + the README in research/pipeline_backbone, and a short "what changed" line on the page.
+
+## Nov 18, 2026: Steve's Guys headshots
+- Steve's Guys player circles now show the ESPN NBA headshot (same source as the rookie table) inside the team-color circle; if the image fails, the initials show as before. Change is in pipeline/render.py (pp() + .gc .pp .gb img CSS).

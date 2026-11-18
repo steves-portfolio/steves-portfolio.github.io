@@ -1,0 +1,31 @@
+{
+ "_note": "Steve's Guys (NBA players he's invested in). Each group = one card; aids are ESPN ids, class = which NBA table they come from. Text is Steve's take, written with him (approved direction Nov 17, 2026: confident tone; Demin 'watching closer'; Traoré speed/downhill, efficiency, beating slot; Stirtz connector IQ, OKC development, followed him at Drake and Iowa).",
+ "groups": [
+  {
+   "title": "Brooklyn's backcourt",
+   "team": "BKN",
+   "color": "#1d1f23",
+   "class": [
+    "2025",
+    "2025"
+   ],
+   "aids": [
+    "5175643",
+    "5279130"
+   ],
+   "take": "Brooklyn hit on both of its 2025 guards, and I want them together. Traoré is the engine. He lives going downhill, and it's turning into real production: 13.6 a night on 61% true shooting in 23 minutes. He went 19th and he's producing like a top-7 pick in his class. Demin is the one I'm watching closer. The model has him as a Volume Shooter, the type it trusts least, because his BYU season was heavy on usage and turnovers. But a 6'9\" guard who averaged almost 8 assists per 40 doesn't come around often, and he's started every game he's played. If his shot holds up, Brooklyn has its backcourt."
+  },
+  {
+   "title": "Bennett Stirtz",
+   "team": "OKC",
+   "color": "#007ac1",
+   "class": [
+    "2026"
+   ],
+   "aids": [
+    "5241364"
+   ],
+   "take": "I've been on Stirtz since Drake. I watched him run Ben McCollum's offense there, followed him to Iowa when McCollum moved, and saw him put up 19.8 a game against Big Ten defenses without forcing anything. The model agrees with me: he's a Connector, the archetype that has beaten its draft slot. Now he's in OKC, the best place in the league for a guy like this to develop, and he's already earning 18 minutes a night as a rookie on a deep roster. He's producing ahead of where he went at 16, and the minutes are only going up from here."
+  }
+ ]
+}

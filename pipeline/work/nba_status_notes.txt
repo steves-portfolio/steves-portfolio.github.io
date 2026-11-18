@@ -1,0 +1,19 @@
+# Why a drafted player has 0 (or almost 0) NBA games. Checked 2026-11-17 (ESPN NBA injuries feed + athlete pages, team/beat reports). id|team|note
+# Refresh weekly: re-check every listed player plus any new 0-game player in the 2026 class or the 2025/2024 first rounds; drop a note once he's playing normally.
+5101845|SA|Out (knee), not cleared yet; return ~Dec 3
+5105462|MEM|Two-way deal; out (knee)
+5105626|BKN|Two-way, G League (Long Island Nets)
+4838721|NY|Two-way, G League (Westchester Knicks)
+5037878|DET|Two-way, G League (Motor City Cruise)
+5107251|ORL|Out (ankle)
+5105571|ATL|Out for the season (torn ACL)
+4897438|MIN|Went back to college; Wolves keep his rights
+5106270||Free agent (last with OKC)
+5108969||Free agent (last with GS)
+4870564|BKN|Mostly in the G League (Long Island Nets)
+5061575|CHA|Out (hamstring), re-check mid-December
+5061603|OKC|Out (knee surgery), ~late January
+5108024|LAC|Out (foot)
+5242502|BKN|Mostly in the G League (Long Island Nets)
+4684275||Waived by CHA in Sept; now in the G League (Westchester Knicks)
+4702159||Waived by PHI in camp; G League (Delaware Blue Coats)

@@ -35,6 +35,13 @@ table.bd td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)
 .pw{display:flex;gap:10px;align-items:center}.pw .hs,.pn .hs{width:44px;height:32px}.hs.ini{display:inline-flex;align-items:center;justify-content:center;font:700 12px var(--f-ui);color:var(--ink3);background:#f1ece1;border-radius:6px;flex:none}
 .pn small .nt{color:#a8791c;font-weight:600}
 .aw li{align-items:center}.aw li .tl{width:28px;height:28px;object-fit:contain;flex:none;display:inline-block}
+.sg{display:grid;grid-template-columns:3fr 2fr;gap:18px}@media (max-width:900px){.sg{grid-template-columns:1fr}}
+.gc{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}.gc .gh{color:#fff;padding:14px 18px;display:flex;align-items:center;gap:10px}
+.gc .gh b{font:700 20px var(--f-serif)}.gc .gh img{width:30px;height:30px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
+.gc .pl{display:grid;gap:12px;padding:16px 18px 4px}.gc .pl.two{grid-template-columns:1fr 1fr}@media (max-width:600px){.gc .pl.two{grid-template-columns:1fr}}
+.gc .pp{display:flex;gap:12px;align-items:flex-start}.gc .pp .gb{width:62px;height:62px;border-radius:50%;flex:none;display:inline-flex;align-items:center;justify-content:center;color:#fff;font:700 20px var(--f-serif);letter-spacing:.02em;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--line2)}.gc .pp .nm{font:700 16px var(--f-serif)}.gc .pp .mt{font:500 12px/1.5 var(--f-ui);color:var(--ink3)}
+.gc .st{display:flex;gap:14px;margin-top:6px;font:500 12px var(--f-ui);color:var(--ink3)}.gc .st b{display:block;font:700 17px var(--f-ui);color:var(--ink)}
+.gc .tk{margin:12px 18px 16px;padding-top:12px;border-top:1px solid var(--line);font:400 14.5px/1.6 var(--f-ui);color:var(--ink2)}.gc .tk i{display:block;font:700 11px var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-style:normal;margin-bottom:4px}
 .ctab .chip{font-size:13.5px;padding:7px 14px}
 .hero h1{font:700 clamp(30px,4.2vw,44px)/1.15 var(--f-serif);margin:6px 0 10px;max-width:900px}.hero .take{font:600 19px/1.45 var(--f-serif);color:var(--ink2);max-width:820px;margin:0}
 """
@@ -78,7 +85,7 @@ html = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=
 <p class="sd" id="awd"></p><div class="aw"><div class="cbox"><h4>Player of the Year</h4><ol id="poy"></ol></div><div class="cbox"><h4>Freshman of the Year <small style="font:500 12px var(--f-ui);color:var(--ink3)">(first year in D1)</small></h4><ol id="fy"></ol></div></div></section>
 
 <section class="sec"><span class="kick">Steve's Guys</span><h3 class="sh">The players I'm following</h3>
-<div class="note">This section fills in from <b>Steves Notes.xlsx</b>: mark a player "Y" under My guy, add your archetype call and notes, and each one gets a card here with your take next to what the numbers say.</div></section>
+<p class="sd">NBA players I'm invested in, my read next to what the numbers say.</p><div class="sg" id="guys"></div></section>
 
 <section class="sec"><span class="kick">The NBA chapter</span><h3 class="sh">Did it hold up in the league?</h3>
 <div class="charts"><div class="cbox"><h4>Where a draft class ends up</h4><p class="cap">Role in the 2025-26 season. Starter = started most of 30+ games; Rotation = 15+ min/game; Bench = less; Out = under 10 NBA games.</p><div id="c_flow"></div><div class="lg-k" id="flk"></div></div></div>
@@ -191,6 +198,13 @@ function drawRk(){ const cols = [['pick','Pick'],['name', CL === '2026' ? 'Rooki
   $('#rtab').innerHTML = '<thead><tr>' + cols.map(([k,h]) => `<th data-k="${k}">${h}${rsk===k?(rsd>0?' ↑':' ↓'):''}</th>`).join('') + '</tr></thead><tbody>' + rows.map(r => `<tr><td><b>${r.pick}</b></td><td class="pn"><span class="pw">${face('nba', r.aid, r.name)}<span>${esc(r.name)}<small>${esc(r.college)}${r.team || CL === '2026' ? ' → ' + esc(r.team || 'unsigned') : ''}${r.note ? ` · <span class="nt">${esc(r.note)}</span>` : r.gp ? '' : r.nba_status === 'Free Agent' ? ' · waived / free agent' : r.nba_status === 'Inactive' ? ' · inactive' : ' · no games yet'}</small></span></span></td><td><span class="ab" style="background:${ACc(r.archetype)}">${r.archetype}</span></td><td>${r.c_ppg ?? '—'}${r.c_gp && r.c_gp < 15 ? `<small style="display:block;color:var(--ink3);font-size:11px">${r.c_gp} games</small>` : ''}</td><td>${r.gp||0}</td><td>${r.mpg??''}</td><td>${r.ppg??''}</td><td><b>${r.gs_g??''}</b></td><td>${r.vs_slot!=null?`<span class="gp ${r.vs_slot>=3?'up':r.vs_slot<=-3?'dn':''}">${r.vs_slot>0?'+':''}${r.vs_slot}</span>`:''}</td></tr>`).join('') + '</tbody>';
   document.querySelectorAll('#rtab th').forEach(th => th.onclick = () => { const k = th.dataset.k; rsd = rsk === k ? -rsd : (['pick','name','archetype'].includes(k) ? 1 : -1); rsk = k; drawRk(); }); }
 drawChips(); drawCls(); drawRk();
+// Steve's guys
+(() => { const G = D.guys || [], src = {'2026': D.rookies, '2025': D.sophomores, '2024': D.class2024 || []};
+  const pp = (r, col) => `<div class="pp"><span class="gb" style="background:${col}">${initials(r.name)}</span><div><div class="nm">${esc(r.name)}</div><div class="mt">Pick ${r.pick} · ${r.c_ppg == null ? 'International' : esc(r.college)} · <span style="color:${ACc(r.archetype)};font-weight:700">${r.archetype === 'No college data' ? 'No college archetype' : r.archetype}</span></div>
+    <div class="st"><span><b>${r.ppg ?? '—'}</b>ppg</span><span><b>${r.ts != null ? (r.ts*100).toFixed(1) + '%' : '—'}</b>TS</span><span><b>${r.mpg ?? '—'}</b>min</span><span><b class="gp ${r.vs_slot>=3?'up':r.vs_slot<=-3?'dn':''}" style="font-size:17px">${r.vs_slot != null ? (r.vs_slot>0?'+':'') + r.vs_slot : '—'}</b>vs. slot</span></div></div></div>`;
+  $('#guys').innerHTML = G.map(g => { const rs = g.aids.map((id, i) => (src[g.class[i]] || []).find(r => r.aid === id)).filter(Boolean);
+    return `<div class="gc"><div class="gh" style="background:${g.color}"><img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/${g.team.toLowerCase()}.png&w=60&h=60" alt="" onerror="this.remove()"><b>${esc(g.title)}</b></div>
+      <div class="pl ${rs.length > 1 ? 'two' : ''}">${rs.map(r => pp(r, g.color)).join('')}</div><div class="tk"><i>Why I'm in</i>${esc(g.take)}</div></div>`; }).join(''); })();
 // stacked bars: class x round -> role
 (() => { const roles = ['Starter','Rotation','Bench','Out / G League'], col = {'Starter':'#1f4e8c','Rotation':'#5b84bf','Bench':'#c9bfa8','Out / G League':'#b23a3a'};
   const keys = []; [2023,2024,2025].forEach(c => [1,2].forEach(r => keys.push([c,r]))); const W = 520, rh = 38, H = keys.length*rh + 6; let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Role by draft class and round">`;

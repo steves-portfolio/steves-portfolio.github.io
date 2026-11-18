@@ -137,7 +137,7 @@ bp["archetype"] = bp.arch.map(lambda i: NAMES[int(i)]); bpp = bp
 import sys; sys.path.insert(0, f"{WS}/pipeline"); from nba_classes import build_class   # Nov 17, 2026: per-class NBA tabs
 rookies26 = build_class(2026, bp, NA_, NSTAT)
 soph25 = build_class(2025, bp, NA_, NSTAT, dr=dr, max_pick=30); class24 = build_class(2024, bp, NA_, NSTAT, dr=dr, max_pick=30)
-out = {"updated": TODAY, "nba_through": NBA_THROUGH, "rookies": rookies26, "sophomores": soph25, "class2024": class24,
+out = {"updated": TODAY, "nba_through": NBA_THROUGH, "rookies": rookies26, "sophomores": soph25, "class2024": class24, "guys": json.load(open(f"{WS}/pipeline/work/steves_guys.json")).get("groups", []) if os.path.exists(f"{WS}/pipeline/work/steves_guys.json") else [],
        "board": json.loads(B.assign(athlete_id=B.athlete_id.map(lambda v: str(int(float(v))) if v == v and v not in (None, "") else "")).to_json(orient="records")),
        "calls": json.loads(calls.to_json(orient="records")),
        "history": json.loads(H.to_json(orient="records")),

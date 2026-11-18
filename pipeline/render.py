@@ -33,6 +33,8 @@ table.bd td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)
 .rc .top{display:flex;gap:10px;align-items:center}.hs{width:54px;height:40px;object-fit:cover;object-position:top;border-radius:6px;background:#f1ece1}
 .rc .ln{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font:500 12.5px/1.45 var(--f-ui);margin-top:10px}.rc .ln span:nth-child(odd){color:var(--ink3);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
 .pw{display:flex;gap:10px;align-items:center}.pw .hs,.pn .hs{width:44px;height:32px}.hs.ini{display:inline-flex;align-items:center;justify-content:center;font:700 12px var(--f-ui);color:var(--ink3);background:#f1ece1;border-radius:6px;flex:none}
+.pn small .nt{color:#a8791c;font-weight:600}
+.ctab .chip{font-size:13.5px;padding:7px 14px}
 .hero h1{font:700 clamp(30px,4.2vw,44px)/1.15 var(--f-serif);margin:6px 0 10px;max-width:900px}.hero .take{font:600 19px/1.45 var(--f-serif);color:var(--ink2);max-width:820px;margin:0}
 """
 html = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Pipeline · Steve Trombetta</title><meta name="description" content="Steve Trombetta follows every NBA draft prospect from his first college game to his third NBA season, and grades his own model along the way."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f4e8c'/%3E%3Ctext x='32' y='44' font-family='Impact,sans-serif' font-size='34' fill='white' text-anchor='middle'%3EST%3C/text%3E%3C/svg%3E">
@@ -57,15 +59,14 @@ html = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=
 <p class="sd">Rules: a <b>sleeper</b> is a Movement Shooter, Connector or Swiss Army Forward with a glue score of 60+ whom my model ranks 8+ spots above the experts. A <b>caution</b> is a Volume Shooter in the experts' top 20. Calls become official, dated and graded once a player reaches 8 games.</p>
 <div class="cards" id="watch"></div><div class="note" id="calls"></div></section>
 
-<section class="sec" id="nba"><span class="kick">Now in the NBA</span><h3 class="sh">The 2026 class: from college to the league</h3>
+<section class="sec" id="nba"><span class="kick">Now in the NBA</span><h3 class="sh">From college to the league</h3>
+<div class="chips ctab" id="ctabs"></div>
 <p class="sd" id="rkd"></p>
 <div class="rk" id="rkcards"></div>
-<div class="charts" style="margin-top:20px"><div class="cbox"><h4>Does the glue carry over already?</h4><p class="cap">Each dot is a rookie (3+ games, 10+ min a game): his college rate (per 40) against his NBA rate (per 36). r = how tightly they line up.</p><div id="c_tr"></div></div>
+<div class="charts" id="r26only" style="margin-top:20px"><div class="cbox"><h4>Does the glue carry over already?</h4><p class="cap">Each dot is a rookie (3+ games, 10+ min a game): his college rate (per 40) against his NBA rate (per 36). r = how tightly they line up.</p><div id="c_tr"></div></div>
 <div class="cbox"><h4>2026 class: production vs. draft slot by archetype</h4><p class="cap" id="c26cap"></p><div id="c_26"></div><p class="cap" id="c26n"></p></div></div>
 <div class="chips" id="rchips" style="margin-top:18px"></div>
-<div class="tw"><table class="bd" id="rtab"></table></div>
-<h4 style="font:700 20px var(--f-serif);margin:26px 0 4px">Year 2: the 2025 class</h4><p class="sd" style="font-size:14px">Second-year players, same lens. Top 10 by Game Score per game this season.</p>
-<div class="tw"><table class="bd" id="stab"></table></div></section>
+<div class="tw"><table class="bd" id="rtab"></table></div></section>
 
 <section class="sec" id="backbone"><span class="kick">The backbone</span><h3 class="sh">What 570 drafted players taught me</h3>
 <p class="sd" id="bbd"></p>
@@ -149,12 +150,20 @@ $('#awd').innerHTML = `Ranked by impact on a winner: Game Score per game plus ho
 const li = (a,i) => `<li><span class="r">${i+1}</span><span><b>${esc(a.name)}</b> <small>${esc(a.team)} (${a.record}) · ${a.ppg} ppg, ${a.rpg} reb, ${a.apg} ast</small></span></li>`;
 $('#poy').innerHTML = D.awards.poy.map(li).join(''); $('#fy').innerHTML = D.awards.fy.map(li).join('');
 // rookies
-const RK = D.rookies, Q = RK.filter(r => r.gp >= 3), hs = id => face('nba', id, (D.rookies.find(r => r.aid === id) || {}).name);
-$('#rkd').innerHTML = `Every college player from last June's draft, with his college line next to his NBA line (data through ${D.nba_through}). ${Q.length} of ${RK.length} have played 3+ games. "Vs. slot" = his production rank among rookies minus his draft rank: + means he's outplaying where he was picked.`;
-const card = (r, dn) => `<div class="rc ${dn?'dn':''}"><div class="top">${hs(r.aid)}<div><b style="font:700 17px var(--f-serif)">${esc(r.name)}</b><div class="m" style="font:500 12px var(--f-ui);color:var(--ink3)">Pick ${r.pick} · ${esc(r.team||'')} · <span style="color:${AC[r.archetype]};font-weight:700">${r.archetype}</span></div></div><span class="gp ${dn?'dn':'up'}" style="margin-left:auto;font:700 18px var(--f-ui)">${r.vs_slot>0?'+':''}${r.vs_slot}</span></div>
-  <div class="ln"><span>College</span><span>${esc(r.college)}: ${r.c_ppg} ppg · ${r.c_reb40} reb/40 · ${r.c_ast40} ast/40</span><span>NBA</span><span>${r.ppg} ppg · ${r.rpg} reb · ${r.apg} ast in ${r.mpg} min · TS ${r.ts!=null?(r.ts*100).toFixed(1)+'%':'—'}</span></div></div>`;
-const up = [...Q].sort((a,b) => b.vs_slot - a.vs_slot || b.gs_g - a.gs_g).slice(0,3), dn = [...Q].sort((a,b) => a.vs_slot - b.vs_slot).slice(0,3);
-$('#rkcards').innerHTML = up.map(r => card(r,false)).join('') + dn.map(r => card(r,true)).join('');
+const CLS = {'2026': {rows: D.rookies, tab: '2026 class · rookies', who: 'rookies', d: n => `Every college player from last June's draft, with his college line next to his NBA line (data through ${D.nba_through}). ${n}`},
+  '2025': {rows: D.sophomores, tab: '2025 class · year 2', who: 'the first round', d: n => `The 2025 first round, year 2: his last college season next to this NBA season (data through ${D.nba_through}). ${n}`},
+  '2024': {rows: D.class2024 || [], tab: '2024 class · year 3', who: 'the first round', d: n => `The 2024 first round, year 3: his last college season next to this NBA season (data through ${D.nba_through}). ${n}`}};
+let CL = '2026', RK = D.rookies; const Q = D.rookies.filter(r => r.gp >= 3), ACc = k => AC[k] || '#8a8f98', hs = (id, nm) => face('nba', id, nm);
+const card = (r, dn) => `<div class="rc ${dn?'dn':''}"><div class="top">${hs(r.aid, r.name)}<div><b style="font:700 17px var(--f-serif)">${esc(r.name)}</b><div class="m" style="font:500 12px var(--f-ui);color:var(--ink3)">Pick ${r.pick} · ${esc(r.team||'')} · <span style="color:${ACc(r.archetype)};font-weight:700">${r.archetype}</span></div></div><span class="gp ${dn?'dn':'up'}" style="margin-left:auto;font:700 18px var(--f-ui)">${r.vs_slot>0?'+':''}${r.vs_slot}</span></div>
+  <div class="ln"><span>College</span><span>${r.c_ppg == null ? (r.college === 'Pro route' ? 'Pro route (overseas or G League), no college games' : 'College stats missing from the data') : `${esc(r.college)}: ${r.c_ppg} ppg · ${r.c_reb40} reb/40 · ${r.c_ast40} ast/40`}</span><span>NBA</span><span>${r.ppg} ppg · ${r.rpg} reb · ${r.apg} ast in ${r.mpg} min · TS ${r.ts!=null?(r.ts*100).toFixed(1)+'%':'—'}</span></div></div>`;
+function drawCls(){ const C = CLS[CL], q = RK.filter(r => r.gp >= 3);
+  $('#rkd').innerHTML = C.d(`${q.length} of ${RK.length} have played 3+ games. "Vs. slot" = his production rank (Game Score per game) among ${C.who} minus his draft rank: + means he's outplaying where he was picked.`);
+  const up = [...q].sort((a,b) => b.vs_slot - a.vs_slot || b.gs_g - a.gs_g).slice(0,3), dn = [...q].sort((a,b) => a.vs_slot - b.vs_slot || a.gs_g - b.gs_g).slice(0,3);
+  $('#rkcards').innerHTML = up.map(r => card(r,false)).join('') + dn.map(r => card(r,true)).join('');
+  $('#r26only').style.display = CL === '2026' ? '' : 'none'; }
+$('#ctabs').innerHTML = ['2026','2025','2024'].map(k => `<button class="chip" data-c="${k}" aria-pressed="${k===CL}">${CLS[k].tab}</button>`).join('');
+document.querySelectorAll('#ctabs .chip').forEach(b => b.onclick = () => { CL = b.dataset.c; RK = CLS[CL].rows; rf = 'All'; rsk = 'pick'; rsd = 1;
+  document.querySelectorAll('#ctabs .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); drawChips(); drawCls(); drawRk(); });
 // translation small multiples
 (() => { const T = Q.filter(r => r.mpg >= 10), pairs = [['Rebounds','c_reb40','n_reb36'],['Assists','c_ast40','n_ast36'],['Steals + blocks','c_stk40','n_stk36']], W = 560, pw = 170, ph = 150;
   const corr = (a,b) => { const n = a.length, ma = a.reduce((x,y)=>x+y,0)/n, mb = b.reduce((x,y)=>x+y,0)/n; let sab=0,sa=0,sb=0; for (let i=0;i<n;i++){sab+=(a[i]-ma)*(b[i]-mb);sa+=(a[i]-ma)**2;sb+=(b[i]-mb)**2;} return sab/Math.sqrt(sa*sb); };
@@ -173,16 +182,14 @@ $('#rkcards').innerHTML = up.map(r => card(r,false)).join('') + dn.map(r => card
   $('#c_26').innerHTML = s + '</svg>'; })();
 // rookie table
 let rf = 'All', rsk = 'pick', rsd = 1;
-$('#rchips').innerHTML = ['All', ...Object.keys(AC)].map(k => `<button class="chip" data-k="${k}" aria-pressed="${k==='All'}">${k}</button>`).join('');
-document.querySelectorAll('#rchips .chip').forEach(b => b.onclick = () => { rf = b.dataset.k; document.querySelectorAll('#rchips .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); drawRk(); });
-function drawRk(){ const cols = [['pick','Pick'],['name','Rookie'],['archetype','Archetype'],['c_ppg','College ppg'],['gp','GP'],['mpg','MPG'],['ppg','PPG'],['gs_g','GmSc/g'],['vs_slot','Vs. slot']];
+function drawChips(){ const ks = ['All', ...Object.keys(AC), ...(RK.some(r => !AC[r.archetype]) ? ['No college data'] : [])];
+  $('#rchips').innerHTML = ks.map(k => `<button class="chip" data-k="${k}" aria-pressed="${k===rf}">${k}</button>`).join('');
+  document.querySelectorAll('#rchips .chip').forEach(b => b.onclick = () => { rf = b.dataset.k; document.querySelectorAll('#rchips .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); drawRk(); }); }
+function drawRk(){ const cols = [['pick','Pick'],['name', CL === '2026' ? 'Rookie' : 'Player'],['archetype','Archetype'],['c_ppg','College ppg'],['gp','GP'],['mpg','MPG'],['ppg','PPG'],['gs_g','GmSc/g'],['vs_slot','Vs. slot']];
   let rows = RK.filter(r => rf === 'All' || r.archetype === rf); rows = [...rows].sort((a,b) => { const x = a[rsk], y = b[rsk]; if (x == null) return 1; if (y == null) return -1; return (typeof x === 'string' ? x.localeCompare(y) : x - y) * rsd; });
-  $('#rtab').innerHTML = '<thead><tr>' + cols.map(([k,h]) => `<th data-k="${k}">${h}${rsk===k?(rsd>0?' ↑':' ↓'):''}</th>`).join('') + '</tr></thead><tbody>' + rows.map(r => `<tr><td><b>${r.pick}</b></td><td class="pn"><span class="pw">${face('nba', r.aid, r.name)}<span>${esc(r.name)}<small>${esc(r.college)} → ${esc(r.team||'not in NBA yet')}</small></span></span></td><td><span class="ab" style="background:${AC[r.archetype]}">${r.archetype}</span></td><td>${r.c_ppg}</td><td>${r.gp||0}</td><td>${r.mpg??''}</td><td>${r.ppg??''}</td><td><b>${r.gs_g??''}</b></td><td>${r.vs_slot!=null?`<span class="gp ${r.vs_slot>=3?'up':r.vs_slot<=-3?'dn':''}">${r.vs_slot>0?'+':''}${r.vs_slot}</span>`:''}</td></tr>`).join('') + '</tbody>';
+  $('#rtab').innerHTML = '<thead><tr>' + cols.map(([k,h]) => `<th data-k="${k}">${h}${rsk===k?(rsd>0?' ↑':' ↓'):''}</th>`).join('') + '</tr></thead><tbody>' + rows.map(r => `<tr><td><b>${r.pick}</b></td><td class="pn"><span class="pw">${face('nba', r.aid, r.name)}<span>${esc(r.name)}<small>${esc(r.college)}${r.team || CL === '2026' ? ' → ' + esc(r.team || 'unsigned') : ''}${r.note ? ` · <span class="nt">${esc(r.note)}</span>` : r.gp ? '' : r.nba_status === 'Free Agent' ? ' · waived / free agent' : r.nba_status === 'Inactive' ? ' · inactive' : ' · no games yet'}</small></span></span></td><td><span class="ab" style="background:${ACc(r.archetype)}">${r.archetype}</span></td><td>${r.c_ppg ?? '—'}</td><td>${r.gp||0}</td><td>${r.mpg??''}</td><td>${r.ppg??''}</td><td><b>${r.gs_g??''}</b></td><td>${r.vs_slot!=null?`<span class="gp ${r.vs_slot>=3?'up':r.vs_slot<=-3?'dn':''}">${r.vs_slot>0?'+':''}${r.vs_slot}</span>`:''}</td></tr>`).join('') + '</tbody>';
   document.querySelectorAll('#rtab th').forEach(th => th.onclick = () => { const k = th.dataset.k; rsd = rsk === k ? -rsd : (['pick','name','archetype'].includes(k) ? 1 : -1); rsk = k; drawRk(); }); }
-drawRk();
-// sophomores
-(() => { const S2 = D.sophomores.filter(r => r.gp >= 3).sort((a,b) => b.gs_g - a.gs_g).slice(0,10);
-  $('#stab').innerHTML = '<thead><tr><th>Pick</th><th>Player</th><th>Archetype</th><th>GP</th><th>MPG</th><th>PPG</th><th>RPG</th><th>APG</th><th>GmSc/g</th><th>Vs. slot</th></tr></thead><tbody>' + S2.map(r => `<tr><td><b>${r.pick}</b></td><td class="pn"><span class="pw">${face('nba', r.aid, r.name)}<span>${esc(r.name)}<small>${esc(r.college)} → ${esc(r.team)}</small></span></span></td><td><span class="ab" style="background:${AC[r.archetype]}">${r.archetype}</span></td><td>${r.gp}</td><td>${r.mpg}</td><td>${r.ppg}</td><td>${r.rpg}</td><td>${r.apg}</td><td><b>${r.gs_g}</b></td><td><span class="gp ${r.vs_slot>=3?'up':r.vs_slot<=-3?'dn':''}">${r.vs_slot>0?'+':''}${r.vs_slot}</span></td></tr>`).join('') + '</tbody>'; })();
+drawChips(); drawCls(); drawRk();
 // stacked bars: class x round -> role
 (() => { const roles = ['Starter','Rotation','Bench','Out / G League'], col = {'Starter':'#1f4e8c','Rotation':'#5b84bf','Bench':'#c9bfa8','Out / G League':'#b23a3a'};
   const keys = []; [2023,2024,2025].forEach(c => [1,2].forEach(r => keys.push([c,r]))); const W = 520, rh = 38, H = keys.length*rh + 6; let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Role by draft class and round">`;

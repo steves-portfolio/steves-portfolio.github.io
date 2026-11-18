@@ -1,5 +1,5 @@
 """Builds pipeline.json for The Pipeline page (preview v1, Nov 12 2026)."""
-import json, os, html, datetime, numpy as np, pandas as pd
+import json, os, pathlib, html, datetime, numpy as np, pandas as pd
 DM = os.path.expanduser("~/dm"); WS = os.path.expanduser("~/mnt/Project Portfolio/website source"); R = f"{WS}/research/pipeline_backbone"
 TODAY = datetime.date.today().isoformat()
 AM = json.load(open(f"{R}/archetype_model.json")); NAMES = AM["names"]
@@ -128,25 +128,16 @@ nb["st"] = nb.starter.fillna(False).astype(bool)
 NA_ = nb.sort_values("game_date").groupby("aid").agg(team=("team_abbreviation","last"), gp=("game_id","nunique"), starts=("st","sum"), **{k_:(k_,"sum") for k_ in NS}, gs=("gmsc","sum"))
 NBA_THROUGH = str(nb.game_date.max())[:10]
 bpp = bp.copy()
-def rook(year):
-    out_ = []
-    for r in bpp[bpp.year == year].itertuples():
-        d_ = {"pick": int(r.overall), "name": r.name, "aid": r.athlete_id, "college": r.col_team, "archetype": r.archetype,
-              "c_ppg": round(r.c_points / max(r.col_games, 1), 1), "c_reb40": round(40*(r.c_offensive_rebounds + r.c_defensive_rebounds)/max(r.c_minutes,1), 1),
-              "c_ast40": round(40*r.c_assists/max(r.c_minutes,1), 1), "c_stk40": round(40*(r.c_steals + r.c_blocks)/max(r.c_minutes,1), 1)}
-        if r.athlete_id in NA_.index:
-            n_ = NA_.loc[r.athlete_id]; m_ = max(n_.minutes, 1)
-            d_.update(team=n_.team, gp=int(n_.gp), starts=int(n_.starts), mpg=round(n_.minutes/n_.gp, 1), ppg=round(n_.points/n_.gp, 1), rpg=round(n_.rebounds/n_.gp, 1), apg=round(n_.assists/n_.gp, 1),
-                      ts=round(n_.points/(2*(n_.field_goals_attempted + 0.44*n_.free_throws_attempted)), 3) if n_.field_goals_attempted else None, gs_g=round(n_.gs/n_.gp, 2),
-                      n_reb36=round(36*n_.rebounds/m_, 1), n_ast36=round(36*n_.assists/m_, 1), n_stk36=round(36*(n_.steals + n_.blocks)/m_, 1))
-        else: d_.update(gp=0)
-        out_.append(d_)
-    df_ = pd.DataFrame(out_); q_ = df_[df_.gp >= 3].copy()
-    q_["prod_rank"] = q_.gs_g.rank(ascending=False, method="min"); q_["pick_rank"] = q_.pick.rank(method="min"); q_["vs_slot"] = (q_.pick_rank - q_.prod_rank).astype(int)
-    df_ = df_.merge(q_[["aid","prod_rank","vs_slot"]], on="aid", how="left"); return json.loads(df_.to_json(orient="records"))
+NSTAT = {}
+_sf = pathlib.Path(f"{WS}/pipeline/work/nba_status.txt")
+if _sf.exists():
+    for x in [l for l in _sf.read_text().splitlines() if l and not l.startswith("#")][0].split(","):
+        k, t, st = x.split(":"); NSTAT[k] = (t, st)
 bp["archetype"] = bp.arch.map(lambda i: NAMES[int(i)]); bpp = bp
-rookies26, soph25 = rook(2026), rook(2025)
-out = {"updated": TODAY, "nba_through": NBA_THROUGH, "rookies": rookies26, "sophomores": soph25,
+import sys; sys.path.insert(0, f"{WS}/pipeline"); from nba_classes import build_class   # Nov 17, 2026: per-class NBA tabs
+rookies26 = build_class(2026, bp, NA_, NSTAT)
+soph25 = build_class(2025, bp, NA_, NSTAT, dr=dr, max_pick=30); class24 = build_class(2024, bp, NA_, NSTAT, dr=dr, max_pick=30)
+out = {"updated": TODAY, "nba_through": NBA_THROUGH, "rookies": rookies26, "sophomores": soph25, "class2024": class24,
        "board": json.loads(B.assign(athlete_id=B.athlete_id.map(lambda v: str(int(float(v))) if v == v and v not in (None, "") else "")).to_json(orient="records")),
        "calls": json.loads(calls.to_json(orient="records")),
        "history": json.loads(H.to_json(orient="records")),

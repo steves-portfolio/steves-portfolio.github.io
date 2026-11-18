@@ -106,7 +106,7 @@ el = pl[(pl.gp >= 2) & (pl.mpg >= 20)].copy()
 z = lambda s: (s - s.mean())/s.std()
 el["impact"] = z(el.gs_g) + 0.5*z(el.margin.clip(-30, 30))
 el["first_year"] = ~el.index.isin(prev.index) & ~el.index.isin(load(2025).aid.unique())
-def top(df, n=10): return [{"name": r.name, "team": r.team, "gp": int(r.gp), "ppg": round(r.pts/r.gp,1), "rpg": round(r.reb/r.gp,1), "apg": round(r.ast/r.gp,1), "gs_g": round(r.gs_g,1), "record": f"{int(r.w)}-{int(r.g - r.w)}", "margin": round(r.margin,1), "impact": round(r.impact,2)} for r in df.sort_values("impact", ascending=False).head(n).itertuples()]
+def top(df, n=10): return [{"name": r.name, "team": r.team, "team_id": str(int(float(r.team_id))) if r.team_id == r.team_id else "", "gp": int(r.gp), "ppg": round(r.pts/r.gp,1), "rpg": round(r.reb/r.gp,1), "apg": round(r.ast/r.gp,1), "gs_g": round(r.gs_g,1), "record": f"{int(r.w)}-{int(r.g - r.w)}", "margin": round(r.margin,1), "impact": round(r.impact,2)} for r in df.sort_values("impact", ascending=False).head(n).itertuples()]
 awards = {"poy": top(el), "fy": top(el[el.first_year]), "players": int(len(el)), "median_games": float(pl.gp.median())}
 # ---------------- NBA chapter ----------------
 bp = pd.read_parquet(f"{R}/data/backbone_players.parquet"); bp["archetype"] = bp.arch.map(lambda i: NAMES[int(i)]); bp["name"] = bp.name.map(html.unescape).str.replace(r"\s+", " ", regex=True)

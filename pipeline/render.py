@@ -34,6 +34,7 @@ table.bd td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)
 .rc .ln{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font:500 12.5px/1.45 var(--f-ui);margin-top:10px}.rc .ln span:nth-child(odd){color:var(--ink3);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
 .pw{display:flex;gap:10px;align-items:center}.pw .hs,.pn .hs{width:44px;height:32px}.hs.ini{display:inline-flex;align-items:center;justify-content:center;font:700 12px var(--f-ui);color:var(--ink3);background:#f1ece1;border-radius:6px;flex:none}
 .pn small .nt{color:#a8791c;font-weight:600}
+.aw li{align-items:center}.aw li .tl{width:28px;height:28px;object-fit:contain;flex:none;display:inline-block}
 .ctab .chip{font-size:13.5px;padding:7px 14px}
 .hero h1{font:700 clamp(30px,4.2vw,44px)/1.15 var(--f-serif);margin:6px 0 10px;max-width:900px}.hero .take{font:600 19px/1.45 var(--f-serif);color:var(--ink2);max-width:820px;margin:0}
 """
@@ -147,7 +148,7 @@ $('#watch').innerHTML = B.filter(r => r.flag).sort((a,b) => (a.flag > b.flag ? -
 $('#calls').innerHTML = D.calls.length ? D.calls.map(c => `${c.date}: ${esc(c.player)} (${c.call})`).join('<br>') : `<b>Official calls: none yet.</b> The first ones lock when these players reach 8 games (early December), and each one is graded at the draft and again after his rookie year.`;
 // awards
 $('#awd').innerHTML = `Ranked by impact on a winner: Game Score per game plus how well his team is doing, among players with 20+ minutes a game. Very early (median team: ${D.awards.median_games} games), so expect big moves until mid-December.`;
-const li = (a,i) => `<li><span class="r">${i+1}</span><span><b>${esc(a.name)}</b> <small>${esc(a.team)} (${a.record}) · ${a.ppg} ppg, ${a.rpg} reb, ${a.apg} ast</small></span></li>`;
+const li = (a,i) => `<li><span class="r">${i+1}</span>${a.team_id ? `<img class="tl" src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/${a.team_id}.png&w=56&h=56" alt="${esc(a.team)}" loading="lazy" onerror="this.style.visibility='hidden'">` : '<span class="tl"></span>'}<span><b>${esc(a.name)}</b> <small>${esc(a.team)} (${a.record}) · ${a.ppg} ppg, ${a.rpg} reb, ${a.apg} ast</small></span></li>`;
 $('#poy').innerHTML = D.awards.poy.map(li).join(''); $('#fy').innerHTML = D.awards.fy.map(li).join('');
 // rookies
 const CLS = {'2026': {rows: D.rookies, tab: '2026 class · rookies', who: 'rookies', d: n => `Every college player from last June's draft, with his college line next to his NBA line (data through ${D.nba_through}). ${n}`},

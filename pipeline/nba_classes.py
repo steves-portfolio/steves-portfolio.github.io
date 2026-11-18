@@ -6,6 +6,22 @@ build_class(year, ...) returns one row per pick: college line + this season's NB
 import json, html, os
 import pandas as pd
 ID_FIX = {(2025, 8): "5175643"}   # Egor Demin: draft list has no ESPN id (found on the BKN roster, Nov 17 2026)
+_R = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "research", "pipeline_backbone")
+# Page display line = his actual last college season (ESPN box scores, no blending). Added Nov 17 2026 after Steve caught Demin showing "no college data".
+_CF = os.path.join(_R, "data", "college_final_season.csv")
+CFS = pd.read_csv(_CF, dtype={"athlete_id": str}).set_index("athlete_id") if os.path.exists(_CF) else pd.DataFrame()
+_AM = json.load(open(os.path.join(_R, "archetype_model.json")))
+def _arch(c, h):   # nearest archetype center for a player the backbone missed (same features as the backbone)
+    import numpy as np
+    m = max(c.minutes, 1); fga = max(c.field_goals_attempted, 1)
+    x = dict(pts40=40*c.points/m, orb40=40*c.offensive_rebounds/m, drb40=40*c.defensive_rebounds/m, ast40=40*c.assists/m, tov40=40*c.turnovers/m,
+             stl40=40*c.steals/m, blk40=40*c.blocks/m, tpa_rate=c.three_point_field_goals_attempted/fga, ftr=c.free_throws_attempted/fga, height_in=h)
+    z = (np.array([x[f] for f in _AM["features"]]) - np.array(_AM["mean"])) / np.array(_AM["sd"])
+    return _AM["names"][int(np.argmin(np.linalg.norm(np.array(_AM["centers"]) - z, axis=1)))]
+def _line(aid):
+    c = CFS.loc[aid]; m = max(c.minutes, 1)
+    return {"college": c.team, "c_gp": int(c.gp), "c_ppg": round(c.points/c.gp, 1), "c_reb40": round(40*(c.offensive_rebounds + c.defensive_rebounds)/m, 1),
+            "c_ast40": round(40*c.assists/m, 1), "c_stk40": round(40*(c.steals + c.blocks)/m, 1)}
 _NF = os.path.join(os.path.dirname(os.path.abspath(__file__)), "work", "nba_status_notes.txt")
 NOTES = {}
 if os.path.exists(_NF):
@@ -35,6 +51,10 @@ def build_class(year, bp, NA_, NSTAT=None, dr=None, max_pick=None):
             d_ = {"pick": pick, "name": r["name"], "aid": aid, "college": r.col_team, "archetype": r.archetype,
                   "c_ppg": round(r.c_points / max(r.col_games, 1), 1), "c_reb40": round(40*(r.c_offensive_rebounds + r.c_defensive_rebounds)/max(r.c_minutes, 1), 1),
                   "c_ast40": round(40*r.c_assists/max(r.c_minutes, 1), 1), "c_stk40": round(40*(r.c_steals + r.c_blocks)/max(r.c_minutes, 1), 1)}
+            if aid in CFS.index: d_.update(_line(aid))
+        elif aid in CFS.index:   # in the box scores but missing from the backbone (e.g. Demin)
+            h = dr[(dr.year == year) & (dr.overall == pick)].height_in.iloc[0] if dr is not None else None
+            d_ = {"pick": pick, "name": " ".join(name.split()), "aid": aid, "archetype": _arch(CFS.loc[aid], float(h) if h == h and h else 79.0), **_line(aid)}
         else:
             d_ = {"pick": pick, "name": " ".join(name.split()), "aid": aid, "college": "College stats missing" if col else "Pro route", "archetype": "No college data", "c_ppg": None}   # e.g. Egor Demin (BYU): ESPN has no box scores for him
         if aid in NA_.index: d_.update(_nba_line(aid, NA_))

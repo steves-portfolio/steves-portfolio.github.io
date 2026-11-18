@@ -18,6 +18,7 @@ JS = r"""() => ({
   guardPaintAnchors: (typeof D !== 'undefined') ? D.board.filter(r => r.pos === 'G' && r.archetype === 'Paint Anchor').map(r => r.player) : ['D missing'],
   nbaThrough: (typeof D !== 'undefined') ? D.nba_through : null, updated: (typeof D !== 'undefined') ? D.updated : null,
   noTeam: (typeof D !== 'undefined') ? D.rookies.filter(r => !r.team && !r.note).map(r => r.name) : [],
+  colMissing: (typeof D !== 'undefined') ? [...D.rookies, ...(D.sophomores||[]), ...(D.class2024||[])].filter(r => r.college === 'College stats missing').map(r => r.name) : [],
   unexplained: (typeof D !== 'undefined') ? [...D.rookies, ...(D.sophomores||[]), ...(D.class2024||[])].filter(r => !r.gp && !r.note).map(r => r.name) : [],
   nan: /\bNaN\b|undefined/.test(document.body.innerText)
 })"""
@@ -39,6 +40,7 @@ if r["svgs"] < 8: problems.append(f"only {r['svgs']} charts rendered")
 if r["poy"] < 5 or r["fy"] < 5: problems.append("award race lists empty")
 if r["guardPaintAnchors"]: problems.append("guards labeled Paint Anchor: " + ", ".join(r["guardPaintAnchors"]))
 if r["nan"]: problems.append("NaN or undefined printed on the page")
+if r["colMissing"]: problems.append("college players with no college line (fix the ESPN id in research/pipeline_backbone/college_final_season.py FIX and nba_classes.py ID_FIX): " + ", ".join(r["colMissing"]))
 if r["unexplained"]: problems.append("players with 0 NBA games and no status note (add them to pipeline/work/nba_status_notes.txt): " + ", ".join(r["unexplained"]))
 if r["noTeam"]: problems.append("rookies with no NBA team or status (refresh pipeline/work/nba_status.txt): " + ", ".join(r["noTeam"]))
 if r["nbaThrough"]:

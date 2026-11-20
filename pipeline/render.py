@@ -35,7 +35,7 @@ table.bd td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)
 .pw{display:flex;gap:10px;align-items:center}.pw .hs,.pn .hs{width:44px;height:32px}.hs.ini{display:inline-flex;align-items:center;justify-content:center;font:700 12px var(--f-ui);color:var(--ink3);background:#f1ece1;border-radius:6px;flex:none}
 .pn small .nt{color:#a8791c;font-weight:600}
 .aw li{align-items:center}.aw li .tl{width:28px;height:28px;object-fit:contain;flex:none;display:inline-block}
-.sg{display:grid;grid-template-columns:3fr 2fr;gap:18px}@media (max-width:900px){.sg{grid-template-columns:1fr}}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sg .gc:first-child{grid-column:1/-1}@media (max-width:900px){.sg{grid-template-columns:1fr}}
 .gc{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}.gc .gh{color:#fff;padding:14px 18px;display:flex;align-items:center;gap:10px}
 .gc .gh b{font:700 20px var(--f-serif)}.gc .gh img{width:30px;height:30px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
 .gc .pl{display:grid;gap:12px;padding:16px 18px 4px}.gc .pl.two{grid-template-columns:1fr 1fr}@media (max-width:600px){.gc .pl.two{grid-template-columns:1fr}}

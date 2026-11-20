@@ -1,5 +1,5 @@
 {
- "_note": "Steve's Guys (NBA players he's invested in). Each group = one card; aids are ESPN ids, class = which NBA table they come from. Text is Steve's take, written with him (approved direction Nov 17, 2026: confident tone; Demin 'watching closer'; Traoré speed/downhill, efficiency, beating slot; Stirtz connector IQ, OKC development, followed him at Drake and Iowa).",
+ "_note": "Steve's Guys (NBA players he's invested in). Each group = one card; aids are ESPN ids, class = which NBA table they come from. Text is Steve's take, written with him (approved direction Nov 17, 2026: confident tone; Demin 'watching closer'; Traoré speed/downhill, efficiency, beating slot; Stirtz connector IQ, OKC development, followed him at Drake and Iowa). Nov 20, 2026: Brooklyn take rewritten with Steve (overlooked small-market duo, Demin size/skill unicorn + late-season shooting, Traoré speed + France pro league); added Cedric Coward (followed through injury, proving doubters wrong).",
  "groups": [
   {
    "title": "Brooklyn's backcourt",
@@ -13,7 +13,7 @@
     "5175643",
     "5279130"
    ],
-   "take": "Brooklyn hit on both of its 2025 guards, and I want them together. Traoré is the engine. He lives going downhill, and it's turning into real production: 13.6 a night on 61% true shooting in 23 minutes. He went 19th and he's producing like a top-7 pick in his class. Demin is the one I'm watching closer. The model has him as a Volume Shooter, the type it trusts least, because his BYU season was heavy on usage and turnovers. But a 6'9\" guard who averaged almost 8 assists per 40 doesn't come around often, and he's started every game he's played. If his shot holds up, Brooklyn has its backcourt."
+   "take": "Two of the most fun, most overlooked players in the league, and they share a small-market backcourt. Demin was a unicorn at BYU: a 6'9\" guard with a lead guard's passing, almost 8 assists per 40. What sold me came at the end of last season, when the jumper got hot and you could see his game translating to the NBA. Traoré barely got talked about as a rookie. This year he's hard not to watch. He's that fast, and getting downhill against the best defenders in the world looks easy for him. I first caught word of him the year before the draft, when he was a teenager going at grown pros in France's top league. Now he's at 13.6 a night on 61% true shooting, producing like a top-7 pick in his class after going 19th."
   },
   {
    "title": "Bennett Stirtz",
@@ -26,6 +26,18 @@
     "5241364"
    ],
    "take": "I've been on Stirtz since Drake. I watched him run Ben McCollum's offense there, followed him to Iowa when McCollum moved, and saw him put up 19.8 a game against Big Ten defenses without forcing anything. The model agrees with me: he's a Connector, the archetype that has beaten its draft slot. Now he's in OKC, the best place in the league for a guy like this to develop, and he's already earning 18 minutes a night as a rookie on a deep roster. He's producing ahead of where he went at 16, and the minutes are only going up from here."
+  },
+  {
+   "title": "Cedric Coward",
+   "team": "MEM",
+   "color": "#12173f",
+   "class": [
+    "2025"
+   ],
+   "aids": [
+    "4903027"
+   ],
+   "take": "I followed Coward closely all of last year. A shoulder injury ended his only season at Washington State after six games, and that question mark followed him into the draft. He came back healthy and has been proving the doubters wrong ever since. Now he's starting every game for Memphis: 14.1 points and 8.8 rebounds a night on 60% true shooting, producing like the third-best player in his class. He's on pace for a big sophomore year."
   }
  ]
 }
